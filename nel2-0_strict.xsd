@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 30.8.2011 PH - ICZ a.s. -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 24.4.2013 JiSe - ICZ a.s.: zmena validace emailove adresy (EmailType) -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 11.11.2013 JiSe - ICZ a.s.: zmena výčtu (RoleSubType) -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 19.05.2015 Vl. Gregor - ICZ a.s.: v.2.O - verze pro novy registr -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 28.05.2015 Vl. Gregor - ICZ a.s.: v.2.Oa - zavedeni davky -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 13.03.2016 V. Novotny - pridana omezeni na OznaceniType a zaveden KatType -->
+    
+    <xsd:element name="davka">
+        <xsd:annotation>
+            <xsd:documentation>
+                Dávka - root element
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="nel" maxOccurs="100" type="NelType"/>
+            </xsd:sequence>
+            <xsd:attribute name="odeslano" type="xsd:dateTime"/>
+            <xsd:attribute name="idSouboru" type="IdType"/>
+            <xsd:attribute name="pocet" type="xsd:integer"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:complexType name="NelType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Bezpečnostní list
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="oznamovatel" type="OznamovatelType"/>
+            <xsd:element name="dodavatel" minOccurs="0" type="DodavatelType"/>
+            <xsd:element name="bl1" type="Bl1Type"/>
+            <xsd:element name="bl2" minOccurs="0" type="Bl2Type"/>
+            <xsd:element name="bl3" type="Bl3Type"/>
+            <xsd:element name="bl9" minOccurs="0" type="Bl9Type"/>
+            <xsd:element name="bl11" minOccurs="0" type="Bl11Type"/>
+            <xsd:element name="dokumentace" minOccurs="0" maxOccurs="unbounded" type="DokumentaceType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="OznamovatelType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Oznamovatel
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="subjekt" type="SubjektType"/>
+            <xsd:element name="dalsio" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="rolesub" type="RoleSubType"/>
+            <xsd:element name="revize"  type="RevizeType"  />
+            <xsd:element name="kontakt" type="KontaktType"/>
+            <xsd:element name="ntel" minOccurs="0" type="Str33"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="DodavatelType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Dodavatel
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="subjekt" type="SubjektType"/>
+            <xsd:element name="dalsid" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="rolesub" type="RoleSubType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Bl1Type">
+        <xsd:annotation>
+            <xsd:documentation>
+                Bezpečnostní list - sekce 1
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="nazev" type="Str255"/>
+    <!--    <xsd:element name="regcis" minOccurs="0" type="Str10"/>     -->            <!-- vztah k cislu povoleni???  -->
+            <xsd:element name="kategorie" type="KategorieType"/>
+            <xsd:element name="pouziti" type="Str4000"/>
+            <xsd:element name="povoleni"  minOccurs="0" type="Str50"/>
+            <xsd:element name="info" type="Str4000"/>
+            <xsd:element name="weburl" minOccurs="0" type="Str255"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Bl2Type">
+        <xsd:annotation>
+            <xsd:documentation>
+                Bezpečnostní list - sekce 2
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="uczdr" minOccurs="0" type="Str4000"/>
+            <xsd:element name="ucfch" minOccurs="0" type="Str4000"/>
+            <xsd:element name="oznaceni" type="OznaceniType"/>
+            <xsd:element name="dalsiudaje" minOccurs="0" type="Str4000"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Bl3Type">
+        <xsd:annotation>
+            <xsd:documentation>
+                Bezpečnostní list - sekce 3
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="chchar" minOccurs="0" type="Str4000"/>
+            <xsd:element name="slozka" maxOccurs="unbounded" type="SlozkaType"/>     <!-- alespon jedna nebezpecna slozka  -->
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Bl9Type">
+        <xsd:annotation>
+            <xsd:documentation>
+                Bezpečnostní list - sekce 9
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="vlasku" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlaba" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlaza" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlaph" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlarozv" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlarozd" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlavis" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlarozt" minOccurs="0" type="Str64"/>
+            <xsd:element name="vlaaci2" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlaaci10" minOccurs="0" type="Str32"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Bl11Type">
+        <xsd:annotation>
+            <xsd:documentation>
+              Bezpečnostní list - sekce 11
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="dtox" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxdra" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxzir" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxsen" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxchro" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxkarc" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxmut" minOccurs="0" type="Str4000"/>
+            <xsd:element name="toxrep" minOccurs="0" type="Str4000"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="DokumentaceType">
+        <xsd:annotation>
+          <xsd:documentation>
+             Dokumentace
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="typprilohy" type="TypPrilohyType"/>
+            <xsd:element name="souborpopis" type="Str1024"/>
+            <xsd:element name="soubornazev"  type="Str255"  />
+            <xsd:element name="souborobsah" type="xsd:base64Binary"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- common complex types -->
+
+    <xsd:complexType name="OznaceniType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Označení nebezpečnosti
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="klasifikace" type="Str1024" minOccurs="0"/>
+            <xsd:element name="hveta" maxOccurs="unbounded" type="HvetaType"/>
+            <xsd:element name="pveta" maxOccurs="unbounded" type="PvetaType"/>
+            <xsd:element name="euhveta" maxOccurs="unbounded" type="EuhvetaType"/>
+            <xsd:element name="symbol" maxOccurs="9" type="SymbolType"/>
+            <xsd:element name="signalnislovo" type="SignalniSlovoType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="HvetaType">
+        <xsd:annotation>
+            <xsd:documentation>
+                H věta
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="kod" type="HvetaKodType" use="required"/>
+                <xsd:attribute name="kategorie" type="Str48" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="PvetaType">
+        <xsd:annotation>
+            <xsd:documentation>
+                P věta
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="kod" type="PvetaKodType" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="EuhvetaType">
+        <xsd:annotation>
+            <xsd:documentation>
+                EUH věta
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="kod" type="EuhvetaKodType" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+        
+    <xsd:simpleType name="SignalniSlovoType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Signální slovo
+                1 Nebezpečí
+                2 Varování
+                3 Žádné signální slovo
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:int">
+            <xsd:enumeration value="1"/>
+            <xsd:enumeration value="2"/>
+            <xsd:enumeration value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="ToxiType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Toxicita
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="dtoxpo" minOccurs="0" type="Str128"/>
+            <xsd:element name="dtoxdis" minOccurs="0" type="Str128"/>
+            <xsd:element name="dtoxmor" minOccurs="0" type="Str128"/>
+            <xsd:element name="dtoxpi" minOccurs="0" type="Str128"/>
+            <xsd:element name="dtoxpd" minOccurs="0" type="Str128"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="SlozkaType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Složka přípravku (nebezpečná nebo ostatní)
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="nazev" type="Str255"/>
+            <xsd:element name="dalsinazev" minOccurs="0" type="Str255"/>
+            <xsd:element name="obsah" type="Str64"/>
+            <xsd:element name="nesl" minOccurs="0" type="NeslType"/>
+            <xsd:element name="cas" minOccurs="0" type="Str16"/>
+            <xsd:element name="es" minOccurs="0" type="Str16"/>
+            <xsd:element name="kat" type="KatType"/>
+            <xsd:element name="dtox" minOccurs="0" type="ToxiType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="SubjektType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Podnikatelský subjekt 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="ojmeno" type="Str255"/>
+            <xsd:element name="orgjed"  minOccurs="0" type="Str255"/>
+            <xsd:element name="ic"  minOccurs="0" type="IcType"/>
+            <xsd:element name="dic" type="Str20"/>
+            <xsd:element name="adresa" type="AdresaType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="KontaktType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Kontaktní­ osoba 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="typ" type="TkontaktuType"/>
+            <xsd:element name="jmeno" type="Str40"/>
+            <xsd:element name="prijm" type="Str40"/>
+            <xsd:element name="tel" type="TcisType"/>
+            <xsd:element name="fax" type="TcisType" minOccurs="0"/>
+            <xsd:element name="email" type="EmailType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="AdresaType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Adresa 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="uli" type="Str48"/>
+            <xsd:element name="obc" type="Str48"/>
+            <xsd:element name="psc" type="PscType"/>
+            <xsd:element name="stat" type="Str5"/>
+            <xsd:element name="tel" type="TcisType" minOccurs="0"/>
+            <xsd:element name="fax" type="TcisType" minOccurs="0"/>
+            <xsd:element name="email" type="EmailType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- simple types -->
+    
+    <xsd:simpleType name="TypPrilohyType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Typ přílohy
+                0   Návod k použití
+                1        Štítek
+                2        Bezpečnostní list
+                3        Testy účinnosti
+                4        Jiné přílohy
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:int">
+            <xsd:enumeration value="0"/>
+            <xsd:enumeration value="1"/>
+            <xsd:enumeration value="2"/>
+            <xsd:enumeration value="3"/>
+            <xsd:enumeration value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="HvetaKodType">
+        <xsd:annotation>
+            <xsd:documentation>
+            Hveta kod
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+                <xsd:pattern value="H[1-9][0-9]{2}[idfDF]{0,1}[dfDF]{0,1}"/>
+                <xsd:minLength value="4"/>
+                <xsd:maxLength value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="PvetaKodType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Pveta kod
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[P0-9+]*"/>         <!-- lepe osetrit slozene vety -->
+            <xsd:minLength value="4"/>
+            <xsd:maxLength value="12"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EuhvetaKodType">
+        <xsd:annotation>
+            <xsd:documentation>
+                EUHveta kod
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="EUH[0-9]{3}A{0,1}"/>
+            <xsd:minLength value="6"/>
+            <xsd:maxLength value="7"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="KatType">
+        <xsd:restriction base="Str255">
+            <!-- retezec ve formatu kategorie; EUH/H veta, kategorie; EUH/H veta, ... -->
+            <xsd:pattern value="([^;]+;\s*(H[1-9][0-9]{2}[idfDF]{0,1}[dfDF]{0,1}|EUH[0-9]{3}A{0,1}),)*[^;]+;\s*(H[1-9][0-9]{2}[idfDF]{0,1}[dfDF]{0,1}|EUH[0-9]{3}A{0,1})"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="SymbolType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Vystrazny symbol GHS
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="GHS0[1-9]"/>
+            <xsd:minLength value="5"/>
+            <xsd:maxLength value="5"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="KoncentraceType">
+        <xsd:restriction base="xsd:string">
+                <xsd:pattern value="[0-9]{1,11}([.,][0-9]{0,5})?"/>
+                <xsd:minLength value="2"/>
+                <xsd:maxLength value="17"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="RoleSubType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Role subjektu A-výrobce B-dovozce C-distributor E-následný uživatel F-dodavatel 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="A"/>
+            <xsd:enumeration value="B"/>
+            <xsd:enumeration value="C"/>
+            <xsd:enumeration value="E"/>
+            <xsd:enumeration value="F"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="IdType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="([0-9A-Z._/\-])*"/>
+            <xsd:minLength value="5"/>
+            <xsd:maxLength value="40"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+<!--      <xsd:simpleType name="VetyType">
+        <xsd:restriction base="Str255">
+            <xsd:pattern value="([RS 0-9-/])*"/>
+        </xsd:restriction>
+    </xsd:simpleType> -->
+
+    <xsd:simpleType name="Str5">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 5 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="5"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str8">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 8 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="8"/>
+        </xsd:restriction>
+    </xsd:simpleType>    
+    
+    <xsd:simpleType name="Str10">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 10 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="10"/>
+        </xsd:restriction>
+    </xsd:simpleType>    
+     
+    <xsd:simpleType name="Str16">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Text maximální délky 16 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="16"/>
+        </xsd:restriction>
+    </xsd:simpleType>    
+
+   <xsd:simpleType name="Str20">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 20 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="20"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+           
+     <xsd:simpleType name="Str32">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 32 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="32"/>
+        </xsd:restriction>
+    </xsd:simpleType> 
+
+    <xsd:simpleType name="Str33">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 33 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="33"/>
+        </xsd:restriction>
+    </xsd:simpleType>    
+          
+    <xsd:simpleType name="Str40">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 40 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="40"/>
+        </xsd:restriction>
+    </xsd:simpleType>    
+        
+    <xsd:simpleType name="Str48">
+        <xsd:annotation>
+            <xsd:documentation>
+                    Text maximální délky 48 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="48"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str50">
+        <xsd:annotation>
+            <xsd:documentation>
+                    Text maximální délky 50 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="50"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str64">
+        <xsd:annotation>
+            <xsd:documentation>
+                    Text maximální délky 64 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="64"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str128">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 128 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="128"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str255">
+        <xsd:annotation>
+            <xsd:documentation>
+                Text maximální délky 255 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="255"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str1024">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Text maximální délky 1024 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="1024"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Str4000">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Text maximální délky 4000 znaků
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="4000"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="IcType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[0-9A-Z]{8,20}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="EmailType">
+        <xsd:restriction base="xsd:string">
+         <xsd:pattern value="[a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~-]+(/?\.[a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(/?[a-zA-Z0-9](/?[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](/?[a-zA-Z0-9-]*[a-zA-Z0-9])?" />
+            <xsd:minLength value="3"/>
+            <xsd:maxLength value="255"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="RevizeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[0-9]\.[0-9]{1,2}"/>
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="50"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="TkontaktuType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="1"/>
+            <xsd:enumeration value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="TcisType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[+ 0-9]*"/>
+            <xsd:minLength value="9"/>
+            <xsd:maxLength value="33"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="PscType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[ A-Z0-9]*"/>
+            <xsd:minLength value="3"/>
+            <xsd:maxLength value="20"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="KategorieType">
+        <xsd:restriction base="xsd:int">
+            <xsd:enumeration value="1"/>
+            <xsd:enumeration value="2"/>
+            <xsd:enumeration value="3"/>
+            <xsd:enumeration value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="NeslType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
