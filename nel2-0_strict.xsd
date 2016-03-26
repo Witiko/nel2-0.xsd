@@ -6,6 +6,7 @@
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 19.05.2015 Vl. Gregor - ICZ a.s.: v.2.O - verze pro novy registr -->
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 28.05.2015 Vl. Gregor - ICZ a.s.: v.2.Oa - zavedeni davky -->
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 13.03.2016 V. Novotny - pridana omezeni na OznaceniType a zaveden KatType -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 26.03.2016 V. Novotny - rozpustnost ve vode je v Bl9Type povinna -->
     
     <xsd:element name="davka">
         <xsd:annotation>
@@ -124,7 +125,7 @@
             <xsd:element name="vlaba" minOccurs="0" type="Str32"/>
             <xsd:element name="vlaza" minOccurs="0" type="Str32"/>
             <xsd:element name="vlaph" minOccurs="0" type="Str32"/>
-            <xsd:element name="vlarozv" minOccurs="0" type="Str32"/>
+            <xsd:element name="vlarozv" minOccurs="1" type="Str32"/>
             <xsd:element name="vlarozd" minOccurs="0" type="Str32"/>
             <xsd:element name="vlavis" minOccurs="0" type="Str32"/>
             <xsd:element name="vlarozt" minOccurs="0" type="Str64"/>
