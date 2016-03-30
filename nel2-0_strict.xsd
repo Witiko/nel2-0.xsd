@@ -7,6 +7,7 @@
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 28.05.2015 Vl. Gregor - ICZ a.s.: v.2.Oa - zavedeni davky -->
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 13.03.2016 V. Novotny - pridana omezeni na OznaceniType a zaveden KatType -->
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 26.03.2016 V. Novotny - rozpustnost ve vode je v Bl9Type povinna -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 30.03.2016 V. Novotny - OznaceniType nyni obsahuje prave jedno <signalnislovo> a <hveta>, <pveta>, <euhveta> a <symbol> se nesmi opakovat. -->
     
     <xsd:element name="davka">
         <xsd:annotation>
@@ -100,6 +101,43 @@
             <xsd:element name="oznaceni" type="OznaceniType"/>
             <xsd:element name="dalsiudaje" minOccurs="0" type="Str4000"/>
         </xsd:sequence>
+				<!-- Dodatečná interitní omezení -->
+				<xsd:unique name="hvety">
+						<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+										Zajišťuje, že se H-věty neopakují.
+								</xsd:documentation>
+						</xsd:annotation>
+            <xsd:selector xpath="oznaceni/hveta"/>
+						<xsd:field xpath="kod"/>
+				</xsd:unique>
+				<xsd:unique name="pvety">
+						<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+										Zajišťuje, že se P-věty neopakují.
+								</xsd:documentation>
+						</xsd:annotation>
+            <xsd:selector xpath="oznaceni/pveta"/>
+						<xsd:field xpath="kod"/>
+				</xsd:unique>
+				<xsd:unique name="euhvety">
+						<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+										Zajišťuje, že se EUH-věty neopakují.
+								</xsd:documentation>
+						</xsd:annotation>
+            <xsd:selector xpath="oznaceni/euhveta"/>
+						<xsd:field xpath="kod"/>
+				</xsd:unique>
+				<xsd:unique name="symboly">
+						<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+										Zajišťuje, že se symboly neopakují.
+								</xsd:documentation>
+						</xsd:annotation>
+						<xsd:selector xpath="oznaceni"/>
+						<xsd:field xpath="symbol"/>
+				</xsd:unique>
     </xsd:complexType>
     
     <xsd:complexType name="Bl3Type">
@@ -180,7 +218,7 @@
             <xsd:element name="pveta" maxOccurs="unbounded" type="PvetaType"/>
             <xsd:element name="euhveta" maxOccurs="unbounded" type="EuhvetaType"/>
             <xsd:element name="symbol" maxOccurs="9" type="SymbolType"/>
-            <xsd:element name="signalnislovo" type="SignalniSlovoType"/>
+            <xsd:element name="signalnislovo" minOccurs="1" maxOccurs="1" type="SignalniSlovoType"/>
         </xsd:sequence>
     </xsd:complexType>
 
