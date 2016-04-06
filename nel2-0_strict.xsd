@@ -8,6 +8,7 @@
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 13.03.2016 V. Novotny - pridana omezeni na OznaceniType a zaveden KatType -->
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 26.03.2016 V. Novotny - rozpustnost ve vode je v Bl9Type povinna -->
     <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 30.03.2016 V. Novotny - OznaceniType nyni obsahuje prave jedno <signalnislovo> a <hveta>, <pveta>, <euhveta> a <symbol> se nesmi opakovat. -->
+    <!-- XSD pro oznameni slozeni smesi nebo detergentu aktualizace 6.4.2016 V. Novotny - Sekce <bl11> je povinna. -->
     
     <xsd:element name="davka">
         <xsd:annotation>
@@ -38,7 +39,7 @@
             <xsd:element name="bl2" minOccurs="0" type="Bl2Type"/>
             <xsd:element name="bl3" type="Bl3Type"/>
             <xsd:element name="bl9" minOccurs="0" type="Bl9Type"/>
-            <xsd:element name="bl11" minOccurs="0" type="Bl11Type"/>
+            <xsd:element name="bl11" minOccurs="1" type="Bl11Type"/>
             <xsd:element name="dokumentace" minOccurs="0" maxOccurs="unbounded" type="DokumentaceType"/>
         </xsd:sequence>
     </xsd:complexType>
@@ -98,46 +99,47 @@
         <xsd:sequence>
             <xsd:element name="uczdr" minOccurs="0" type="Str4000"/>
             <xsd:element name="ucfch" minOccurs="0" type="Str4000"/>
-            <xsd:element name="oznaceni" type="OznaceniType"/>
+            <xsd:element name="oznaceni" type="OznaceniType">
+                <!-- Dodatečná integritni omezení -->
+                <xsd:unique name="hvety">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            Zajišťuje, že se H-věty neopakují.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:selector xpath="hveta"/>
+                    <xsd:field xpath="@kod"/>
+                </xsd:unique>
+                <xsd:unique name="pvety">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            Zajišťuje, že se P-věty neopakují.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:selector xpath="pveta"/>
+                    <xsd:field xpath="@kod"/>
+                </xsd:unique>
+                <xsd:unique name="euhvety">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            Zajišťuje, že se EUH-věty neopakují.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:selector xpath="euhveta"/>
+                    <xsd:field xpath="@kod"/>
+                </xsd:unique>
+                <xsd:unique name="symboly">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            Zajišťuje, že se symboly neopakují.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:selector xpath="symbol"/>
+                    <xsd:field xpath="."/>
+                </xsd:unique>
+            </xsd:element>
             <xsd:element name="dalsiudaje" minOccurs="0" type="Str4000"/>
         </xsd:sequence>
-				<!-- Dodatečná interitní omezení -->
-				<xsd:unique name="hvety">
-						<xsd:annotation>
-								<xsd:documentation xml:lang="en">
-										Zajišťuje, že se H-věty neopakují.
-								</xsd:documentation>
-						</xsd:annotation>
-            <xsd:selector xpath="oznaceni/hveta"/>
-						<xsd:field xpath="kod"/>
-				</xsd:unique>
-				<xsd:unique name="pvety">
-						<xsd:annotation>
-								<xsd:documentation xml:lang="en">
-										Zajišťuje, že se P-věty neopakují.
-								</xsd:documentation>
-						</xsd:annotation>
-            <xsd:selector xpath="oznaceni/pveta"/>
-						<xsd:field xpath="kod"/>
-				</xsd:unique>
-				<xsd:unique name="euhvety">
-						<xsd:annotation>
-								<xsd:documentation xml:lang="en">
-										Zajišťuje, že se EUH-věty neopakují.
-								</xsd:documentation>
-						</xsd:annotation>
-            <xsd:selector xpath="oznaceni/euhveta"/>
-						<xsd:field xpath="kod"/>
-				</xsd:unique>
-				<xsd:unique name="symboly">
-						<xsd:annotation>
-								<xsd:documentation xml:lang="en">
-										Zajišťuje, že se symboly neopakují.
-								</xsd:documentation>
-						</xsd:annotation>
-						<xsd:selector xpath="oznaceni"/>
-						<xsd:field xpath="symbol"/>
-				</xsd:unique>
     </xsd:complexType>
     
     <xsd:complexType name="Bl3Type">
